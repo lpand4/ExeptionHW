@@ -1,5 +1,8 @@
 package org.example;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,11 +17,19 @@ public class Main {
             String[] personData = checkerDataForSize(data);
             Person person = parseData(personData);
             System.out.println(person);
+            writeDataToFile(person);
         } catch (MineException e) {
             System.err.println(e.getMessage());
         }
+    }
 
-
+    public static void writeDataToFile(Person person){
+        String filename = person.getSurname();
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(filename,true))) {
+            bw.write(person.toString());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public static String inputData(){
@@ -115,6 +126,29 @@ class Person{
         this.phoneNumber = phoneNumber;
         this.gender = gender;
     }
+    public String getName() {
+        return name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public String getPatronymic() {
+        return patronymic;
+    }
+
+    public String getBirthdate() {
+        return birthdate;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getGender() {
+        return gender;
+    }
     public Person(String[] stringParameters){
         this(stringParameters[0],
                 stringParameters[1],
@@ -127,9 +161,12 @@ class Person{
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(surname).append(" ").append(name).append(" ")
-                .append(patronymic).append(" ").append(birthdate).append(" ")
-                .append(phoneNumber).append(" ").append(gender);
+        sb.append(surname).append(" ")
+                .append(name).append(" ")
+                .append(patronymic).append(" ")
+                .append(birthdate).append(" ")
+                .append(phoneNumber).append(" ")
+                .append(gender).append("\n");
         return sb.toString();
     }
 }
